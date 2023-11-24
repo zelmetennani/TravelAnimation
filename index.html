@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Animation App</title>
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="font-sans bg-gray-100">
+
+    <!-- Sidebar for User Inputs -->
+    <div class="w-1/4 p-4 bg-white shadow-lg">
+        <h2 class="text-xl font-semibold mb-4">Add Your Travel Details</h2>
+        <div class="mb-4">
+            <label for="city" class="block text-sm font-medium text-gray-600">City:</label>
+            <input type="text" id="city" placeholder="Enter city name"
+                class="mt-1 p-2 w-full border rounded-md">
+        </div>
+
+        <div class="mb-4">
+            <label for="order" class="block text-sm font-medium text-gray-600">Order:</label>
+            <input type="number" id="order" placeholder="Enter order of travel"
+                class="mt-1 p-2 w-full border rounded-md">
+        </div>
+
+        <button onclick="addCity()"
+            class="w-full p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Add City</button>
+    </div>
+
+    <!-- Map Container -->
+    <div id="map" class="w-3/4 h-screen"></div>
+
+    <!-- Include Google Maps API Script -->
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSTFsbqShp2ybWSQ6HAPMKqAfPoCrwb68&callback=initMap">
+    </script>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"></script>
+
+    <script>
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 0, lng: 0 },
+                zoom: 2,
+                mapTypeId: 'satellite',
+                tilt: 45,
+            });
+        }
+
+        function addCity() {
+            const cityName = document.getElementById('city').value;
+            const order = document.getElementById('order').value;
+
+            // Add logic to update the map with the new city and order
+        }
+    </script>
+
+</body>
+
+</html>
