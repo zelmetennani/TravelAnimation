@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spining Globe</title>
+    <style>
+        body { margin: 0;}
+        canvas { display: block;}
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+</head>
+<body>
+    <script type="module" src="https://unpkg.com/three@0.125.2/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+
+        // 1. Basic Scene Setup
+        const THREE = window.THREE;
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, .1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+
+        // 2. Add a sphere
+        const globeGeometry = new THREE.SphereGeometry(5, 32, 32);
+        const globeTexture = new THREE.TextureLoader().load('globe.jpeg');
+        const globeMaterial = new THREE.MeshBasicMaterial({ map: globeTexture});
+        const globe = new THREE.Mesh(globeGeometry, globeMaterial);
+        scene.add(globe);
+
+        // 3. Position camera 
+        camera.position.z = 10;
+
+        // 4. Add a render loop to spin the globe
+        function animate() {
+            requestAnimationFrame (animate);
+
+            //Spin the globe
+            globe.rotation.y += 0.007
+            
+            renderer.render(scene, camera)
+        };
+
+        animate();
+    </script>
+</body>
+</html>
