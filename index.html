@@ -29,6 +29,24 @@
             class="w-full p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Add Pin</button>
     </div>
 
+    <!-- List of Added Pins -->
+    <div class="w-3/4 p-4 bg-white shadow-lg">
+        <h2 class="text-xl font-semibold mb-4">Added Pins</h2>
+        <table class="w-full border">
+            <thead>
+                <tr>
+                    <th class="border p-2">Location</th>
+                    <th class="border p-2">Latitude</th>
+                    <th class="border p-2">Longitude</th>
+                </tr>
+            </thead>
+            <tbody id="pinList">
+                <!-- Dynamic content will be added here -->
+            </tbody>
+        </table>
+    </div>
+
+
     <!-- Header Above the Map -->
     <div class="flex items-start justify-end w-full p-4">
         <div class="w-1/4 p-4 bg-white shadow-lg">
@@ -39,22 +57,20 @@
 <!-- Map Container -->
 <div id="map" style="width: 100%; height: 80vh;"></div>
 
-<!-- Include Google Maps API Script -->
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSTFsbqShp2ybWSQ6HAPMKqAfPoCrwb68&libraries=places&callback=initMap"></script>
-
-<!-- Tailwind CSS CDN -->
-<script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"></script>
-
 <script>
+
+    let map;
+    let autocomplete;
+
     function initMap() {
-        const map = new google.maps.Map(document.getElementById('map'), {
+        map = new google.maps.Map(document.getElementById('map'), {
             center: { lat: 0, lng: 0 },
             zoom: 2,
             mapTypeId: 'satellite',
             tilt: 0,
         });
 
-        const autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'));
+        autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'));
         autocomplete.bindTo('bounds', map);
     }
 
@@ -74,6 +90,17 @@
         });
 
         map.setCenter(marker.getPosition());
+
+        // Add pin to the list
+        const pinList = document.getElementById('pinList');
+        const row = pinList.insertRow();
+        const cell1 = row.insertCell(0);
+        const cell2 = row.insertCell(1);
+        const cell3 = row.insertCell(2);
+
+        cell1.textContent = place.name;
+        cell2.textContent = place.geometry.location.lat();
+        cell3.textContent = place.geometry.location.lng();
 
         // Clear the input field
         document.getElementById('autocomplete').value = '';
