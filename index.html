@@ -20,8 +20,9 @@
         <h2 class="text-xl font-semibold mb-4">Add Your Travel Details</h2>
         <div class="mb-4">
             <label for="pin" class="block text-sm font-medium text-gray-600">Add Pin:</label>
-            <input type="text" id="pin" placeholder="Enter city name or coordinates"
-                class="mt-1 p-2 w-full border rounded-md">
+            <!-- Input for Adding Pins -->
+        <input id="autocomplete" placeholder="Search for a location" class="mt-1 p-2 w-full border rounded-md">
+
         </div>
 
         <button onclick="addPin()"
@@ -35,34 +36,50 @@
         </div>
     </div>
 
-    <!-- Map Container -->
-    <div id="map" style="width: 100%; height: 80vh;"></div>
+<!-- Map Container -->
+<div id="map" style="width: 100%; height: 80vh;"></div>
 
-    <!-- Include Google Maps API Script -->
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSTFsbqShp2ybWSQ6HAPMKqAfPoCrwb68&callback=initMap">
-    </script>
+<!-- Include Google Maps API Script -->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSTFsbqShp2ybWSQ6HAPMKqAfPoCrwb68&libraries=places&callback=initMap"></script>
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"></script>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"></script>
 
-    <script>
-        function initMap() {
-            const map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: 0, lng: 0 },
-                zoom: 2,
-                mapTypeId: 'satellite',
-                tilt: 0,
-            });
+<script>
+    function initMap() {
+        const map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 0, lng: 0 },
+            zoom: 2,
+            mapTypeId: 'satellite',
+            tilt: 0,
+        });
+
+        const autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'));
+        autocomplete.bindTo('bounds', map);
+    }
+
+    function addPin() {
+        const place = autocomplete.getPlace();
+
+        if (!place.geometry) {
+            alert("No details available for input: " + document.getElementById('autocomplete').value);
+            return;
         }
 
-        function addCity() {
-            const cityName = document.getElementById('city').value;
-            const order = document.getElementById('order').value;
+        const marker = new google.maps.Marker({
+            position: place.geometry.location,
+            map: map,
+            title: place.name,
+            label: 'A', // You can use a static label or customize it based on your requirements
+        });
 
-            // Add logic to update the map with the new city and order
-        }
-    </script>
+        map.setCenter(marker.getPosition());
+
+        // Clear the input field
+        document.getElementById('autocomplete').value = '';
+    }
+</script>
+
 
 </body>
 
