@@ -56,22 +56,6 @@ body {
   font-family: "Open Sans", sans-serif;
 }
 
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  border-radius: 4px;
-  overflow: hidden;
-  max-width: 30rem;
-}
-
-th {
-  background-color: var(--secondary-color);
-}
-
-tbody {
-  padding: 0 1rem;
-}
-
-tr:nth-child(even) {
-  background-color: white;
+.deletePin-btn {
+  background: rgba(255, 0, 0, 0.5);
 }

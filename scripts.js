@@ -1,6 +1,7 @@
 let map;
 let autocomplete;
 let markers = [];
+let polylines = [];
 
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
@@ -44,8 +45,18 @@ function addPin() {
   // Add pin to the list
   const pinList = document.querySelector(".pinList");
   const li = document.createElement("li");
-  li.className = "text-black mb-2 rounded-md";
+  li.className = "text-black mb-2 rounded-md flex justify-between items-center ";
   li.textContent = listItemText;
+
+  const deleteButton = document.createElement("button");
+  deleteButton.textContent = "X"; //trash icon maybe?
+  deleteButton.className =
+    "ml-2 px-2 py-1 text-white rounded-full hover:bg-red-500 deletePin-btn w-6 h-6 flex justify-center items-center";
+  deleteButton.addEventListener("click", () => {
+    removePin(marker, li);
+  });
+  li.appendChild(deleteButton);
+
   pinList.appendChild(li);
 
   document.getElementById("autocomplete").value = "";
@@ -72,29 +83,61 @@ function getCountryCode(place) {
 
 //Function to draw lines between places
 function drawPolylines() {
+  polylines.forEach((polyline) => {
+    polyline.setMap(null);
+  });
+
   if (markers.length < 2) {
     return;
   }
 
-  const path = markers.map((marker) => marker.getPosition());
+  for (let i = 0; i < markers.length - 1; i++) {
+    const path = [markers[i].getPosition(), markers[i + 1].getPosition()];
 
-  const lineSymbol = {
-    path: google.maps.SymbolPath.FORWARD_OPEN_ARROW,
-    scale: 4,
-    strokeColor: "#808080",
-  };
+    const lineSymbol = {
+      path: google.maps.SymbolPath.FORWARD_OPEN_ARROW,
+      scale: 4,
+      strokeColor: "#808080",
+    };
 
-  const flightPath = new google.maps.Polyline({
-    path: path,
-    icons: [
-      {
-        icon: lineSymbol,
-        offset: "100%",
-      },
-    ],
-    map: map,
-    strokeColor: "#808080",
-  });
+    const flightPath = new google.maps.Polyline({
+      path: path,
+      icons: [
+        {
+          icon: lineSymbol,
+          offset: "100%",
+        },
+      ],
+      map: map,
+      strokeColor: "#808080",
+    });
 
-  flightPath.setMap(map);
+    polylines.push(flightPath);
+  }
+}
+
+//remove pin from map and list
+function removePin(marker, item) {
+  marker.setMap(null);
+  const markerIndex = markers.indexOf(marker);
+  if (markerIndex !== -1) {
+    markers.splice(markerIndex, 1);
+  }
+  removePolyline(markerIndex);
+
+  item.remove();
+
+  drawPolylines();
+}
+
+function removePolyline(markerIndex) {
+  if (markers.length < 2) {
+    return;
+  }
+
+  if (polylines[markerIndex]) {
+    polylines[markerIndex].setMap(null);
+  }
+
+  polylines.splice(markerIndex, 1);
 }
