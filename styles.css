@@ -1,0 +1,77 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap");
+
+:root {
+  --text-color: #000000;
+  --secondary-color: #099195;
+  --accent-color: #1594f1;
+}
+
+body {
+  height: 100vh;
+}
+
+.logo {
+  color: var(--text-color);
+}
+
+.login {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+}
+
+.login:hover {
+  background-color: #1181d1;
+}
+
+.about {
+  color: var(--text-color);
+}
+
+.about:hover {
+  text-decoration: underline;
+}
+
+.pins {
+  color: var(--text-color);
+  width: 36rem;
+}
+
+.addpin-btn {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+}
+
+.addpin-btn:hover {
+  background-color: #1181d1;
+}
+
+#autocomplete {
+  color: var(--text-color-light);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Open Sans", sans-serif;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  max-width: 30rem;
+}
+
+th {
+  background-color: var(--secondary-color);
+}
+
+tbody {
+  padding: 0 1rem;
+}
+
+tr:nth-child(even) {
+  background-color: white;
+}

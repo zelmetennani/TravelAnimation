@@ -1,113 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
     <title>Travel Animation App</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://unpkg.com/three@0.125.2/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSTFsbqShp2ybWSQ6HAPMKqAfPoCrwb68&libraries=places&callback=initMap" async defer></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSTFsbqShp2ybWSQ6HAPMKqAfPoCrwb68&libraries=places&callback=initMap"
+      async
+      defer
+    ></script>
 
     <!-- Include Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  </head>
 
-<body class="font-sans bg-gray-100">
+  <body class="font-sans bg-gray-100">
+    <!-- Nav-bar -->
+    <header class="w-full shadow-sm">
+      <nav class="py-3 px-8 flex justify-between items-center">
+        <div class="logo">
+          <h1 class="logo text-3xl font-bold">World Trip Planner ✈️ 🌍</h1>
+        </div>
+        <div class="buttons flex gap-4">
+          <button class="about px-6 py-1 text-sm font-medium rounded-md">About</button>
+          <button class="login px-6 py-1 text-sm font-medium rounded-md">Login</button>
+        </div>
+      </nav>
+    </header>
 
-    <!-- Sidebar for User Inputs -->
-    <div class="w-1/4 p-4 bg-white shadow-lg">
-        <h2 class="text-xl font-semibold mb-4">Add Your Travel Details</h2>
-        <div class="mb-4">
-            <label for="pin" class="block text-sm font-medium text-gray-600">Add Pin:</label>
+    <main class="flex w-full h-full mt-4">
+      <section class="pins flex flex-col">
+        <!-- Sidebar for User Inputs -->
+        <div class="px-8">
+          <h2 class="text-xl font-semibold mb-4">Add Your Travel Details</h2>
+          <hr />
+          <div class="my-4">
+            <label for="pin" class="block text-sm font-medium">Add Pin:</label>
             <!-- Input for Adding Pins -->
-        <input id="autocomplete" placeholder="Search for a location" class="mt-1 p-2 w-full border rounded-md">
+            <input id="autocomplete" placeholder="Search for a location" class="mt-1 p-2 w-full border rounded-md" />
+          </div>
 
+          <button onclick="addPin()" class="addpin-btn w-full p-2 text-white rounded-md">Add Pin</button>
         </div>
 
-        <button onclick="addPin()"
-            class="w-full p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Add Pin</button>
-    </div>
+        <div class="px-8 mt-8">
+          <h2 class="text-xl font-semibold mb-4">Added Pins</h2>
+          <hr />
+          <ul class="pinList mt-4 flex flex-col overflow-auto">
+            <!-- Dynamic content will be added here   -->
+          </ul>
+        </div>
 
-    <!-- List of Added Pins -->
-    <div class="w-3/4 p-4 bg-white shadow-lg">
-        <h2 class="text-xl font-semibold mb-4">Added Pins</h2>
-        <table class="w-full border">
+        <!-- List of Added Pins -->
+        <!-- 
+        <div class="p-8 shadow-lg">
+          <h2 class="text-xl font-semibold mb-4">Added Pins</h2>
+          <table class="w-full border border-md">
             <thead>
-                <tr>
-                    <th class="border p-2">Location</th>
-                    <th class="border p-2">Latitude</th>
-                    <th class="border p-2">Longitude</th>
-                </tr>
+              <tr class="text-white text-left">
+                <th class="p-2 font-medium">Location</th>
+                <th class="p-2 font-medium">Latitude</th>
+                <th class="p-2 font-medium">Longitude</th>
+              </tr>
             </thead>
             <tbody id="pinList">
-                <!-- Dynamic content will be added here -->
+               Dynamic content will be added here  
             </tbody>
-        </table>
-    </div>
+          </table>
+        </div>-->
+      </section>
 
-
-    <!-- Header Above the Map -->
-    <div class="flex items-start justify-end w-full p-4">
-        <div class="w-1/4 p-4 bg-white shadow-lg">
-            <h1 class="text-2xl font-semibold mb-2">World Trip Planner ✈️ 🌍</h1>
-        </div>
-    </div>
-
-<!-- Map Container -->
-<div id="map" style="width: 100%; height: 80vh;"></div>
-
-<script>
-
-    let map;
-    let autocomplete;
-
-    function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: 0, lng: 0 },
-            zoom: 2,
-            mapTypeId: 'satellite',
-            tilt: 0,
-        });
-
-        autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'));
-        autocomplete.bindTo('bounds', map);
-    }
-
-    function addPin() {
-        const place = autocomplete.getPlace();
-
-        if (!place.geometry) {
-            alert("No details available for input: " + document.getElementById('autocomplete').value);
-            return;
-        }
-
-        const marker = new google.maps.Marker({
-            position: place.geometry.location,
-            map: map,
-            title: place.name,
-            label: 'A', // You can use a static label or customize it based on your requirements
-        });
-
-        map.setCenter(marker.getPosition());
-
-        // Add pin to the list
-        const pinList = document.getElementById('pinList');
-        const row = pinList.insertRow();
-        const cell1 = row.insertCell(0);
-        const cell2 = row.insertCell(1);
-        const cell3 = row.insertCell(2);
-
-        cell1.textContent = place.name;
-        cell2.textContent = place.geometry.location.lat();
-        cell3.textContent = place.geometry.location.lng();
-
-        // Clear the input field
-        document.getElementById('autocomplete').value = '';
-    }
-</script>
-
-
-</body>
-
+      <!-- Map Container -->
+      <div id="map" class="mr-8" style="height: 90vh; width: 100%"></div>
+    </main>
+  </body>
+  <script src="scripts.js"></script>
 </html>
