@@ -12,8 +12,7 @@ function initMap() {
   });
 
   autocomplete = new google.maps.places.Autocomplete(document.getElementById("autocomplete"), {
-    types: ["(cities)"],
-    fields: ["place_id", "geometry", "name"],
+    types: ["locality"],
   });
 
   autocomplete.bindTo("bounds", map);
@@ -31,37 +30,44 @@ function addPin() {
     position: place.geometry.location,
     map: map,
     title: place.name,
-    label: "A", // You can use a static label or customize it based on your requirements
+    animation: google.maps.Animation.DROP,
+    label: getCountryCode(place),
   });
 
   map.setCenter(marker.getPosition());
   markers.push(marker);
 
+  const country = getAddressComponent(place, "country");
+  const city = getAddressComponent(place, "locality");
+  const listItemText = country && city ? `${country} - ${city}` : place.name;
+
   // Add pin to the list
   const pinList = document.querySelector(".pinList");
   const li = document.createElement("li");
   li.className = "text-black mb-2 rounded-md";
-  li.textContent = `${place.name}`;
+  li.textContent = listItemText;
   pinList.appendChild(li);
 
-  /* const pinList = document.getElementById("pinList");
-        const row = pinList.insertRow();
-        row.className = "bg-gray-200 text-black";
-        const cell1 = row.insertCell(0);
-        cell1.className = "px-2 max-w-xs overflow-auto";
-        const cell2 = row.insertCell(1);
-        cell2.className = "px-2 max-w-xs overflow-auto";
-        const cell3 = row.insertCell(2);
-        cell3.className = "px-2 max-w-xs overflow-auto";
-
-        cell1.textContent = place.name;
-        cell2.textContent = place.geometry.location.lat();
-        cell3.textContent = place.geometry.location.lng();
- */
-  // Clear the input field
+  document.getElementById("autocomplete").value = "";
 
   drawPolylines();
-  document.getElementById("autocomplete").value = "";
+}
+
+function getAddressComponent(result, component) {
+  const addressComponents = result.address_components;
+  for (let i = 0; i < addressComponents.length; i++) {
+    const types = addressComponents[i].types;
+    if (types.indexOf(component) !== -1) {
+      return addressComponents[i].long_name;
+    }
+  }
+  return "";
+}
+
+function getCountryCode(place) {
+  const countryComponent = getAddressComponent(place, "country");
+  const countryCode = place.address_components.find((component) => component.types.includes("country"))?.short_name;
+  return countryCode || countryComponent || "";
 }
 
 //Function to draw lines between places
