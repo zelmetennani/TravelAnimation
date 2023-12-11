@@ -45,13 +45,15 @@ function addPin() {
   // Add pin to the list
   const pinList = document.querySelector(".pinList");
   const li = document.createElement("li");
-  li.className = "text-black mb-2 rounded-md flex justify-between items-center ";
+  li.className =
+    "px-2 text-black mb-2 rounded-md flex justify-between items-center py-1 hover:bg-gray-200 cursor-pointer";
   li.textContent = listItemText;
+  li.classList.add("fadeIn");
 
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "X"; //trash icon maybe?
   deleteButton.className =
-    "ml-2 px-2 py-1 text-white rounded-full hover:bg-red-500 deletePin-btn w-6 h-6 flex justify-center items-center";
+    "px-2 py-1 text-white rounded-full hover:bg-red-500 deletePin-btn w-6 h-6 flex justify-center items-center";
   deleteButton.addEventListener("click", () => {
     removePin(marker, li);
   });
@@ -118,16 +120,18 @@ function drawPolylines() {
 
 //remove pin from map and list
 function removePin(marker, item) {
-  marker.setMap(null);
-  const markerIndex = markers.indexOf(marker);
-  if (markerIndex !== -1) {
-    markers.splice(markerIndex, 1);
-  }
-  removePolyline(markerIndex);
+  item.classList.add("fadeOut");
+  setTimeout(() => {
+    marker.setMap(null);
+    const markerIndex = markers.indexOf(marker);
+    if (markerIndex !== -1) {
+      markers.splice(markerIndex, 1);
+    }
+    removePolyline(markerIndex);
 
-  item.remove();
-
-  drawPolylines();
+    item.remove();
+    drawPolylines();
+  }, 300);
 }
 
 function removePolyline(markerIndex) {

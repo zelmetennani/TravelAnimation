@@ -10,7 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   </head>
 
-  <body class="font-sans bg-gray-100">
+  <body class="bg-gray-100">
     <!-- Nav-bar -->
     <header class="w-full shadow-sm">
       <nav class="py-3 px-8 flex justify-between items-center">
@@ -39,6 +39,7 @@
           <button onclick="addPin()" class="addpin-btn w-full p-2 text-white rounded-md">Add Pin</button>
         </div>
 
+        <!-- List of Added Pins -->
         <div class="px-8 mt-8">
           <h2 class="text-xl font-semibold mb-4">Added Pins</h2>
           <hr />
@@ -46,24 +47,6 @@
             <!-- Dynamic content will be added here   -->
           </ul>
         </div>
-
-        <!-- List of Added Pins -->
-        <!-- 
-        <div class="p-8 shadow-lg">
-          <h2 class="text-xl font-semibold mb-4">Added Pins</h2>
-          <table class="w-full border border-md">
-            <thead>
-              <tr class="text-white text-left">
-                <th class="p-2 font-medium">Location</th>
-                <th class="p-2 font-medium">Latitude</th>
-                <th class="p-2 font-medium">Longitude</th>
-              </tr>
-            </thead>
-            <tbody id="pinList">
-               Dynamic content will be added here  
-            </tbody>
-          </table>
-        </div>-->
       </section>
 
       <!-- Map Container -->

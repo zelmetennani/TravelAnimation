@@ -1,4 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Montserrat", sans-serif;
+}
 
 :root {
   --text-color: #000000;
@@ -49,13 +56,39 @@ body {
   color: var(--text-color-light);
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Open Sans", sans-serif;
-}
-
 .deletePin-btn {
   background: rgba(255, 0, 0, 0.5);
+}
+
+/* pin animation */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.pinList li {
+  animation: 0.3s;
+  animation-fill-mode: both;
+}
+
+.pinList li.fadeIn {
+  animation-name: fadeIn;
+}
+
+.pinList li.fadeOut {
+  animation-name: fadeOut;
 }
