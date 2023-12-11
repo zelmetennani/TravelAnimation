@@ -13,7 +13,7 @@ function initMap() {
   });
 
   autocomplete = new google.maps.places.Autocomplete(document.getElementById("autocomplete"), {
-    types: ["locality"],
+    types: ["(regions)"],
   });
 
   autocomplete.bindTo("bounds", map);
@@ -61,6 +61,8 @@ function addPin() {
 
   pinList.appendChild(li);
 
+  makeElementDraggable(li);
+
   document.getElementById("autocomplete").value = "";
 
   drawPolylines();
@@ -99,7 +101,7 @@ function drawPolylines() {
     const lineSymbol = {
       path: google.maps.SymbolPath.FORWARD_OPEN_ARROW,
       scale: 4,
-      strokeColor: "#808080",
+      strokeColor: "#505050",
     };
 
     const flightPath = new google.maps.Polyline({
@@ -111,7 +113,7 @@ function drawPolylines() {
         },
       ],
       map: map,
-      strokeColor: "#808080",
+      strokeColor: "#505050",
     });
 
     polylines.push(flightPath);
@@ -120,18 +122,15 @@ function drawPolylines() {
 
 //remove pin from map and list
 function removePin(marker, item) {
-  item.classList.add("fadeOut");
-  setTimeout(() => {
-    marker.setMap(null);
-    const markerIndex = markers.indexOf(marker);
-    if (markerIndex !== -1) {
-      markers.splice(markerIndex, 1);
-    }
-    removePolyline(markerIndex);
+  marker.setMap(null);
+  const markerIndex = markers.indexOf(marker);
+  if (markerIndex !== -1) {
+    markers.splice(markerIndex, 1);
+  }
+  removePolyline(markerIndex);
 
-    item.remove();
-    drawPolylines();
-  }, 300);
+  item.remove();
+  drawPolylines();
 }
 
 function removePolyline(markerIndex) {
@@ -144,4 +143,19 @@ function removePolyline(markerIndex) {
   }
 
   polylines.splice(markerIndex, 1);
+}
+
+//drag and drop
+function makeElementDraggable(element) {
+  const pinList = document.querySelector(".pinList");
+
+  new Sortable(pinList, {
+    animation: 150,
+    onEnd: function (evt) {
+      const movedMarker = markers.splice(evt.oldIndex, 1)[0];
+      markers.splice(evt.newIndex, 0, movedMarker);
+
+      drawPolylines();
+    },
+  });
 }

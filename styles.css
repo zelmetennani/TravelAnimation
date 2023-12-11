@@ -71,15 +71,6 @@ body {
   }
 }
 
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
 .pinList li {
   animation: 0.3s;
   animation-fill-mode: both;
@@ -87,8 +78,4 @@ body {
 
 .pinList li.fadeIn {
   animation-name: fadeIn;
-}
-
-.pinList li.fadeOut {
-  animation-name: fadeOut;
 }
