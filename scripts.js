@@ -27,6 +27,13 @@ function addPin() {
     return;
   }
 
+  const isDuplicate = markers.some((marker) => marker.getTitle() === place.name);
+
+  if (isDuplicate) {
+    showErrorToast("Duplicated place");
+    return;
+  }
+
   const marker = new google.maps.Marker({
     position: place.geometry.location,
     map: map,
@@ -158,4 +165,16 @@ function makeElementDraggable(element) {
       drawPolylines();
     },
   });
+}
+
+//toast
+function showErrorToast(message) {
+  Toastify({
+    text: message,
+    duration: 3000,
+    close: true,
+    gravity: "top",
+    position: "center",
+    backgroundColor: "linear-gradient(to right, #ff9999, #ffcc99)",
+  }).showToast();
 }

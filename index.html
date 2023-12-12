@@ -8,23 +8,24 @@
 
     <!-- Include Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <!-- Toastify -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
   </head>
 
   <body class="bg-gray-100">
     <!-- Nav-bar -->
     <header class="w-full shadow-sm">
-      <nav class="py-3 px-8 flex justify-between items-center">
+      <nav class="py-3 px-8 flex justify-between items-center sm:flex-row flex-col text-center">
         <div class="logo">
           <h1 class="logo text-3xl font-bold">World Trip Planner ✈️ 🌍</h1>
         </div>
         <div class="buttons flex gap-4">
-          <button class="about px-6 py-1 text-sm font-medium rounded-md">About</button>
-          <button class="login px-6 py-1 text-sm font-medium rounded-md">Login</button>
+          <button class="login px-6 py-1 text-sm font-medium rounded-md mt-4 sm:mt-0">Login</button>
         </div>
       </nav>
     </header>
 
-    <main class="flex w-full h-full mt-4">
+    <main class="flex w-full h-full mt-4 flex-col sm:flex-row">
       <section class="pins flex flex-col">
         <!-- Sidebar for User Inputs -->
         <div class="px-8">
@@ -62,6 +63,8 @@
   ></script>
   <!-- SortableJS for drag and drop -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+  <!-- Toastify -->
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
   <script src="scripts.js"></script>
 </html>

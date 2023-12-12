@@ -79,3 +79,9 @@ body {
 .pinList li.fadeIn {
   animation-name: fadeIn;
 }
+
+@media (max-width: 600px) {
+  .pins {
+    width: 100%;
+  }
+}
