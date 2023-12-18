@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
   </head>
 
-  <body class="bg-gray-100">
+  <body class="bg-gray-100" onload="loadMarkersFromLocalStorage(); loadPinList()">
     <!-- Nav-bar -->
     <header class="w-full shadow-sm">
       <nav class="py-3 px-8 flex justify-between items-center sm:flex-row flex-col text-center">
@@ -53,18 +53,19 @@
       <!-- Map Container -->
       <div id="map" class="mr-8" style="height: 90vh; width: 100%"></div>
     </main>
-  </body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://unpkg.com/three@0.125.2/examples/js/controls/OrbitControls.js"></script>
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSTFsbqShp2ybWSQ6HAPMKqAfPoCrwb68&libraries=places,geometry&callback=initMap"
-    async
-    defer
-  ></script>
-  <!-- SortableJS for drag and drop -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
-  <!-- Toastify -->
-  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-  <script src="scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.125.2/examples/js/controls/OrbitControls.js"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSTFsbqShp2ybWSQ6HAPMKqAfPoCrwb68&libraries=places,geometry&callback=initMap"
+      async
+      defer
+    ></script>
+    <!-- SortableJS for drag and drop -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <!-- Toastify -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script src="scripts.js"></script>
+  </body>
 </html>

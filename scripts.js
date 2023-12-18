@@ -34,20 +34,20 @@ function addPin() {
     return;
   }
 
+  const country = getAddressComponent(place, "country");
+  const city = getAddressComponent(place, "locality");
+  const listItemText = country && city ? `${country} - ${city}` : place.name;
+
   const marker = new google.maps.Marker({
     position: place.geometry.location,
     map: map,
-    title: place.name,
+    title: listItemText,
     animation: google.maps.Animation.DROP,
     label: getCountryCode(place),
   });
 
   map.setCenter(marker.getPosition());
   markers.push(marker);
-
-  const country = getAddressComponent(place, "country");
-  const city = getAddressComponent(place, "locality");
-  const listItemText = country && city ? `${country} - ${city}` : place.name;
 
   // Add pin to the list
   const pinList = document.querySelector(".pinList");
@@ -71,7 +71,7 @@ function addPin() {
   makeElementDraggable(li);
 
   document.getElementById("autocomplete").value = "";
-
+  saveMarkersToLocalStorage();
   drawPolylines();
 }
 
@@ -137,6 +137,7 @@ function removePin(marker, item) {
   removePolyline(markerIndex);
 
   item.remove();
+  saveMarkersToLocalStorage();
   drawPolylines();
 }
 
@@ -162,6 +163,7 @@ function makeElementDraggable(element) {
       const movedMarker = markers.splice(evt.oldIndex, 1)[0];
       markers.splice(evt.newIndex, 0, movedMarker);
 
+      saveMarkersToLocalStorage();
       drawPolylines();
     },
   });
@@ -177,4 +179,73 @@ function showErrorToast(message) {
     position: "center",
     backgroundColor: "linear-gradient(to right, #ff9999, #ffcc99)",
   }).showToast();
+}
+
+function saveMarkersToLocalStorage() {
+  const markersData = markers.map((marker) => {
+    return {
+      title: marker.getTitle(),
+      position: {
+        lat: marker.getPosition().lat(),
+        lng: marker.getPosition().lng(),
+      },
+      label: marker.getLabel(),
+    };
+  });
+
+  localStorage.setItem("markers", JSON.stringify(markersData));
+}
+
+function loadMarkersFromLocalStorage() {
+  const markersData = localStorage.getItem("markers");
+
+  if (markersData) {
+    const parsedMarkers = JSON.parse(markersData);
+
+    parsedMarkers.forEach((markerData) => {
+      const marker = new google.maps.Marker({
+        position: { lat: markerData.position.lat, lng: markerData.position.lng },
+        map: map,
+        title: markerData.title,
+        animation: google.maps.Animation.DROP,
+        label: markerData.label,
+      });
+
+      markers.push(marker);
+    });
+
+    drawPolylines();
+  }
+}
+
+function loadPinList() {
+  const pinList = document.querySelector(".pinList");
+  const markersData = localStorage.getItem("markers");
+
+  if (markersData) {
+    const parsedMarkers = JSON.parse(markersData);
+
+    parsedMarkers.forEach((markerData) => {
+      const li = document.createElement("li");
+      li.className =
+        "px-2 text-black mb-2 rounded-md flex justify-between items-center py-1 hover:bg-gray-200 cursor-pointer";
+      li.textContent = markerData.title;
+      li.classList.add("fadeIn");
+
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "X"; //trash icon maybe?
+      deleteButton.className =
+        "px-2 py-1 text-white rounded-full hover:bg-red-500 deletePin-btn w-6 h-6 flex justify-center items-center";
+      deleteButton.addEventListener("click", () => {
+        const markerToDelete = markers.find((marker) => marker.getTitle() === markerData.title);
+        if (markerToDelete) {
+          removePin(markerToDelete, li);
+        }
+      });
+      li.appendChild(deleteButton);
+      pinList.appendChild(li);
+
+      makeElementDraggable(li);
+    });
+  }
 }
