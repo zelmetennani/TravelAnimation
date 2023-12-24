@@ -46,6 +46,17 @@ function addPin() {
     label: getCountryCode(place),
   });
 
+  //pin tooltip
+  const buttonHtml =
+    "<button class='text-white cursor-pointer group relative flex gap-1.5 justify-center items-center px-8 py-4 bg-black bg-opacity-80 text-[#f1f1f1] rounded-3xl hover:bg-opacity-70 transition font-semibold shadow-md' onclick=\"console.log('Hello World')\"><i class='fas fa-camera'></i> Add Photo</button>";
+  const contentString = `<div>${buttonHtml}</div>`;
+
+  const infoWindow = createInfoWindow(contentString);
+  saveInfoWindowToLocalStorage(marker.getTitle(), contentString);
+  marker.addListener("click", () => {
+    infoWindow.open(map, marker);
+  });
+
   map.setCenter(marker.getPosition());
   markers.push(marker);
 
@@ -135,6 +146,8 @@ function removePin(marker, item) {
     markers.splice(markerIndex, 1);
   }
   removePolyline(markerIndex);
+
+  removeInfoWindowFromLocalStorage(marker.getTitle());
 
   item.remove();
   saveMarkersToLocalStorage();
@@ -248,4 +261,38 @@ function loadPinList() {
       makeElementDraggable(li);
     });
   }
+}
+
+function createInfoWindow(content) {
+  return new google.maps.InfoWindow({
+    content: content,
+  });
+}
+
+function saveInfoWindowToLocalStorage(markerTitle, contentString) {
+  const infoWindowsData = JSON.parse(localStorage.getItem("infoWindows")) || {};
+  infoWindowsData[markerTitle] = contentString;
+  localStorage.setItem("infoWindows", JSON.stringify(infoWindowsData));
+}
+
+function loadInfoWindowsFromLocalStorage() {
+  const infoWindowsData = JSON.parse(localStorage.getItem("infoWindows")) || {};
+
+  Object.entries(infoWindowsData).forEach(([markerTitle, contentString]) => {
+    const marker = markers.find((m) => m.getTitle() === markerTitle);
+
+    if (marker) {
+      const infoWindow = createInfoWindow(contentString);
+
+      marker.addListener("click", () => {
+        infoWindow.open(map, marker);
+      });
+    }
+  });
+}
+
+function removeInfoWindowFromLocalStorage(markerTitle) {
+  const infoWindowsData = JSON.parse(localStorage.getItem("infoWindows")) || {};
+  delete infoWindowsData[markerTitle];
+  localStorage.setItem("infoWindows", JSON.stringify(infoWindowsData));
 }
