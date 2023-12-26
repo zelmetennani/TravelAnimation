@@ -85,3 +85,13 @@ body {
     width: 100%;
   }
 }
+
+.photo-container {
+  margin-bottom: 10px;
+}
+
+.photo-container img {
+  max-width: 300px;
+  height: auto;
+  display: block;
+}
